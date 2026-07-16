@@ -472,7 +472,7 @@
 
         // --- NUEVA FUNCIÓN PARA REALIZAR POLLING AL BACKEND ---
      function consultarBaseDatosReal() {
-    fetch('http://localhost:3000/api/kds/comandas')
+    fetch('http://192.168.101.20:3000/api/kds/comandas')
     .then(response => response.json())
     .then(platosSQL => {
         if (!Array.isArray(platosSQL)) return;
@@ -590,7 +590,7 @@
 
         // --- NUEVA FUNCIÓN PARA REALIZAR POLLING AL BACKEND ---
         function consultarBaseDatosReal() {
-    fetch('http://localhost:3000/api/kds/comandas')
+    fetch('http://192.168.101.20:3000/api/kds/comandas')
     .then(response => {
         if (!response.ok) {
             throw new Error("Error en la respuesta de Node");
@@ -773,7 +773,7 @@
             if (!comanda) return;
 
             // Enviamos petición al backend para actualizar estado en SQL Server
-            fetch(`http://localhost:3000/api/kds/despachar/${comanda.id}`, { method: 'POST' })
+            fetch(`http://192.168.101.20:3000/api/kds/despachar/${comanda.id}`, { method: 'POST' })
                 .then(res => {
                     if (res.ok) {
                         // Eliminamos el registro de tiempo local
