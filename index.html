@@ -95,16 +95,13 @@
             align-items: center;
             gap: 5px;
         }
-        /* Agrega esto justo aquí abajo: */
-            #btnFullscreen {
-
+        
+        #btnFullscreen {
             padding: 3px 8px;
             font-size: 0.50rem;
-            background-color: #c2410c; /* <- Cambia este código por el color de fondo que desees (ej: Naranja oscuro) */
-            color: #ffffff;            /* <- Cambia este código por el color del texto (ej: Blanco) */
+            background-color: #c2410c; 
+            color: #ffffff;            
         }
-
-
 
         .btn-custom:hover {
             background-color: #52525b;
@@ -114,17 +111,16 @@
             display: none;
         }
         
-        /* CAJA DE TEXTO DEL AUDIO COMPACTA Y REDUCIDA */
         .input-audio-seleccionado {
-            background-color: #1a1a1e;       /* Fondo oscuro que combina */
-            color: #ffffff;                  /* Texto blanco */
+            background-color: #1a1a1e;       
+            color: #ffffff;                  
             border: 1px solid var(--borde);
-            padding: 5px 10px;               /* Reducido para que sea menos alto */
+            padding: 5px 10px;               
             border-radius: 5px;
-            font-size: 0.8rem;               /* Letra ligeramente más pequeña */
+            font-size: 0.8rem;               
             font-weight: bold;
             text-align: center;
-            width: 135px;                    /* Más angosta */
+            width: 135px;                    
             outline: none;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -156,12 +152,10 @@
             transform: scale(0.9);
         }
 
-        /* Botón cuando ya está entregado (Rojo) */
         .btn-tachar.completado {
             background-color: #ef4444 !important;
         }
 
-        /* Contenedor del texto cuando está tachado (Rojo y con línea) */
         .producto-item-contenedor.completado {
             text-decoration: line-through;
             color: #ef4444 !important;
@@ -171,12 +165,11 @@
             color: #ef4444 !important;
         }
 
-        /* Sombreado gris de fondo para cada plato */
         .fila-producto-sombreada {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: #B8E2F5; /* Color amarillo de fondo */
+            background-color: #B8E2F5; 
             padding: 1px 5px;         
             border-radius: 4px;        
             margin-bottom: 4px  !important;    
@@ -198,6 +191,16 @@
             height: 16px;
         }
 
+        /* Estilo para el tiempo capturado del producto en color rojo */
+        .tiempo-producto-capturado {
+            color: #ef4444;
+            font-family: monospace;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-left: auto;
+            margin-right: 5px;
+        }
+
         /* ==========================================================================
            3. CUADRÍCULA DE COMANDAS (GRID 3x4 FIJO)
            ========================================================================== */
@@ -212,7 +215,6 @@
             background-color: var(--bg-principal);
         }
 
-        /* ESTILO PARA LA IMAGEN CUANDO NO HAY COMANDAS */
         .imagen-kds-vacio {
             grid-column: 1 / -1;
             grid-row: 1 / -1;
@@ -222,13 +224,13 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            padding: 0; /* Quitamos cualquier margen interno */
+            padding: 0; 
         }
 
         .imagen-kds-vacio img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Cambiado a 'cover' para que llene absolutamente todo el espacio gris */
+            object-fit: cover; 
             object-position: center;
         }
 
@@ -290,7 +292,6 @@
             100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
         }
 
-        /* Cabecera de la Tarjeta */
         .tarjeta-header {
             padding: 10px 12px;
             background-color: var(--color-estado);
@@ -335,7 +336,6 @@
             object-fit: contain;
         }
 
-        /* Cuerpo / Lista de Productos */
         .tarjeta-body {
             padding: 12px;
             flex-grow: 1;
@@ -344,7 +344,6 @@
             background-color: #FDFCFC;
         }
 
-        /* --- Estilos de la barra de scroll --- */
         .tarjeta-body::-webkit-scrollbar {
             width: 7px !important;       
         }
@@ -384,7 +383,6 @@
             flex-grow: 1;
         }
 
-        /* Botón de nota interactivo */
         .btn-nota {
             background-color: #000000;
             color: #ffffff;
@@ -401,7 +399,6 @@
             background-color: #222222;
         }
 
-        /* Panel de alertas rojo para las indicaciones */
         .panel-alertas-nota {
             background-color: #ef4444;
             color: #ffffff;
@@ -419,7 +416,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Pie de la Tarjeta (Tiempo y Botones) */
         .tarjeta-footer {
             padding: 3px 5px;
             background-color: rgb(12, 65, 99);
@@ -454,7 +450,6 @@
             background-color: #059669;
         }
 
-        /* Scrollbar Custom */
         ::-webkit-scrollbar {
             width: 6px;
         }
@@ -472,9 +467,6 @@
 </head>
 <body>
 
-    <!-- ==========================================================================
-       PANEL DE CONTROL SUPERIOR (HEADER)
-       ========================================================================== -->
     <header>
         <div class="info-general">
             <h2> MIXTURAS - KDS </h2>
@@ -490,7 +482,6 @@
                 <input type="file" id="inputAudio" accept="audio/mp3">
             </label>
 
-            <!-- NUEVO BOTÓN FULLSCREEN -->
             <button class="btn-custom" id="btnFullscreen">FULL</button>
 
             <label class="toggle-sonido">
@@ -502,18 +493,12 @@
         </div>
     </header>
 
-    <!-- ==========================================================================
-       CONTENEDOR DE CUADRÍCULA (GRID FIJO DE 12)
-       ========================================================================== -->
     <main id="kdsGrid">
-        <!-- Generado dinámicamente por JavaScript -->
+        <!-- Generado dinámicamente -->
     </main>
 
     <audio id="audioNotificacion" preload="auto"></audio>
 
-    <!-- ==========================================================================
-       LÓGICA JAVASCRIPT ES6+
-       ========================================================================== -->
     <script> 
         // --- 1. ESTADO DE LA APLICACIÓN ---
         let totalComandasLlegadas = 0;
@@ -521,12 +506,10 @@
         let colaDeEspera = [];
         let audioUrlPorDefecto = "./sound/nuevo pedido.mp3";
 
-        // Almacenes de memoria local
         let tiemposDeOrdenes = {};
+        let tiemposDeProductos = {}; // Guardará el tiempo de captura exacto por producto
         let productosTachados = {}; 
         let notasAbiertas = {}; 
-
-        // Almacén local para guardar comandas ocultadas manualmente sin tocar la Base de Datos
         let comandasDespachadasLocalmente = {};
 
         const imagenesPedido = {
@@ -547,36 +530,22 @@
         btnFullscreen.addEventListener('click', () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen()
-                    .then(() => {
-                        btnFullscreen.innerText = "NORMAL";
-                    })
-                    .catch(err => {
-                        console.error(`Error al intentar activar pantalla completa: ${err.message}`);
-                    });
+                    .then(() => { btnFullscreen.innerText = "NORMAL"; })
+                    .catch(err => { console.error(`Error pantalla completa: ${err.message}`); });
             } else {
-                document.exitFullscreen()
-                    .then(() => {
-                        btnFullscreen.innerText = "FULL";
-                    });
+                document.exitFullscreen().then(() => { btnFullscreen.innerText = "FULL"; });
             }
         });
 
-        // Detectar si el usuario sale de pantalla completa usando la tecla ESC
         document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                btnFullscreen.innerText = "FULL";
-            } else {
-                btnFullscreen.innerText = "NORMAL";
-            }
+            btnFullscreen.innerText = !document.fullscreenElement ? "FULL" : "NORMAL";
         });
 
-        // --- 4. NUEVA FUNCIÓN PARA REALIZAR POLLING AL BACKEND ---
+        // --- 4. CONSULTA AL BACKEND ---
         function consultarBaseDatosReal() {
             fetch('http://localhost:3000/api/kds/comandas')
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error en la respuesta de Node");
-                }
+                if (!response.ok) throw new Error("Error en la respuesta de Node");
                 return response.json();
             })
             .then(platosSQL => {
@@ -591,8 +560,8 @@
                     return;
                 }
 
-                // AGRUPAR platos individuales por "Orden" o "idventa"
                 const mapaComandas = {};
+                const conteoProductosFetch = {}; // Controla duplicados en el mismo fetch
 
                 platosSQL.forEach(item => {
                     const idVentaRaw = item.Orden || item.idventa;
@@ -600,14 +569,12 @@
 
                     const idVenta = String(idVentaRaw);
 
-                    // Si la comanda ya fue despachada de manera local, la ignoramos por completo
                     if (comandasDespachadasLocalmente[idVenta]) return;
 
                     if (!mapaComandas[idVenta]) {
                         const nombreMesa = item.Mesa || `Mesa ${idVenta}`;
                         const destinoConsumo = (item.Donde_se_consumira || "").toUpperCase().trim();
 
-                        // DETECTAR EL TIPO DE PEDIDO
                         let tipoPedido = "Local";
                         if (destinoConsumo === "DELIVERY" || nombreMesa.includes("DELIVERY")) {
                             tipoPedido = "Delivery";
@@ -623,38 +590,52 @@
                             mesa: nombreMesa, 
                             cliente: nombreCliente, 
                             productos: [],
-                            segundosTranscurridos: (typeof tiemposDeOrdenes !== 'undefined' && tiemposDeOrdenes[idVenta]) || 0,
+                            segundosTranscurridos: tiemposDeOrdenes[idVenta] || 0,
                             mostrarNota: false,
                             notaVenta: item.Nota_venta && item.Nota_venta.trim() !== "-" ? item.Nota_venta : "" 
                         };
                     }
                     
+                    const nombreProducto = item.Producto || item.producto || "Plato sin descripción";
+                    
+                    if (!conteoProductosFetch[idVenta]) conteoProductosFetch[idVenta] = {};
+                    if (!conteoProductosFetch[idVenta][nombreProducto]) conteoProductosFetch[idVenta][nombreProducto] = 0;
+                    
+                    const ocurrencia = conteoProductosFetch[idVenta][nombreProducto];
+                    conteoProductosFetch[idVenta][nombreProducto]++;
+
+                    // Generar clave única para guardar el tiempo de este producto
+                    const claveProductoTiempo = `${idVenta}-${nombreProducto}-${ocurrencia}`;
+                    const tiempoActualComanda = tiemposDeOrdenes[idVenta] || 0;
+
+                    // Si el producto es nuevo, congela el tiempo transcurrido actual de la comanda
+                    if (tiemposDeProductos[claveProductoTiempo] === undefined) {
+                        tiemposDeProductos[claveProductoTiempo] = tiempoActualComanda;
+                    }
+
                     mapaComandas[idVenta].productos.push({
                         cant: item.Cant || item.cantidad || 1, 
-                        nombre: item.Producto || item.producto || "Plato sin descripción", 
-                        notes: item.Notaproducto || item.Nota || "" 
+                        nombre: nombreProducto, 
+                        notes: item.Notaproducto || item.Nota || "",
+                        segundosCapturados: tiemposDeProductos[claveProductoTiempo]
                     });
                 });
 
                 const listaComandasAgrupadas = Object.values(mapaComandas);
 
-                // Controlar la notificación sonora
                 let hayNuevaOrden = false;
-                if (typeof tiemposDeOrdenes !== 'undefined') {
-                    listaComandasAgrupadas.forEach(nueva => {
-                        if (tiemposDeOrdenes[nueva.id] === undefined) {
-                            tiemposDeOrdenes[nueva.id] = 0;
-                            hayNuevaOrden = true;
-                        }
-                    });
-                }
+                listaComandasAgrupadas.forEach(nueva => {
+                    if (tiemposDeOrdenes[nueva.id] === undefined) {
+                        tiemposDeOrdenes[nueva.id] = 0;
+                        hayNuevaOrden = true;
+                    }
+                });
 
-                if (hayNuevaOrden && typeof checkSonido !== 'undefined' && checkSonido.checked && typeof audioPlayer !== 'undefined') {
+                if (hayNuevaOrden && checkSonido && checkSonido.checked && audioPlayer) {
                     audioPlayer.currentTime = 0;
                     audioPlayer.play().catch(e => console.log("Interacción requerida para audio."));
                 }
 
-                // REPARTIR en los 12 Slots
                 let nuevasRanuras = Array(12).fill(null);
                 let temporalesFueraDePantalla = [];
 
@@ -668,19 +649,15 @@
 
                 espacioComandas = nuevasRanuras;
                 colaDeEspera = temporalesFueraDePantalla;
-                
                 totalComandasLlegadas = listaComandasAgrupadas.length;
                 
                 const txtTotalComandas = document.getElementById('txtTotalComandas');
-                if (txtTotalComandas) {
-                    txtTotalComandas.innerText = totalComandasLlegadas;
-                }
+                if (txtTotalComandas) txtTotalComandas.innerText = totalComandasLlegadas;
 
                 renderizarPantalla();
             })
             .catch(error => {
-                console.error("Error conectando con el backend Node.js o procesando datos:", error);
-                // Evitamos pantalla negra dibujando los slots vacíos
+                console.error("Error conectando con el backend:", error);
                 espacioComandas = Array(12).fill(null);
                 renderizarPantalla();
             });
@@ -703,40 +680,34 @@
             }
         }
 
-        // Función modificada para ocultar localmente al instante sin tocar la base de datos
         function despacharComanda(index) {
             const comanda = espacioComandas[index];
             if (!comanda) return;
 
-            // 1. Guardamos localmente el ID de la comanda despachada para que el polling de la BD no la vuelva a meter
             comandasDespachadasLocalmente[comanda.id] = true;
-
-            // 2. Eliminamos los datos temporales del almacenamiento en caché local
             delete tiemposDeOrdenes[comanda.id];
+            
+            // Limpiar tiempos de productos al despachar
+            Object.keys(tiemposDeProductos).forEach(clave => {
+                if (clave.startsWith(`${comanda.id}-`)) delete tiemposDeProductos[clave];
+            });
+
             Object.keys(productosTachados).forEach(llave => {
-                if (llave.startsWith(`${comanda.id}-`)) {
-                    delete productosTachados[llave];
-                }
+                if (llave.startsWith(`${comanda.id}-`)) delete productosTachados[llave];
             });
             delete notasAbiertas[comanda.id];
 
-            // 3. Quitamos visualmente la comanda de su ranura
             espacioComandas.splice(index, 1);
 
-            // 4. Traemos la siguiente de la cola de espera si existiera
             if (colaDeEspera.length > 0) {
-                const siguienteComanda = colaDeEspera.shift();
-                espacioComandas.push(siguienteComanda);
+                espacioComandas.push(colaDeEspera.shift());
             } else {
                 espacioComandas.push(null);
             }
 
-            // 5. Restamos una unidad al contador superior de comandas
             totalComandasLlegadas = Math.max(0, totalComandasLlegadas - 1);
             const txtTotalComandas = document.getElementById('txtTotalComandas');
-            if (txtTotalComandas) {
-                txtTotalComandas.innerText = totalComandasLlegadas;
-            }
+            if (txtTotalComandas) txtTotalComandas.innerText = totalComandasLlegadas;
 
             renderizarPantalla();
         }
@@ -747,11 +718,10 @@
             renderizarPantalla(); 
         }
 
-        // --- 7. TEMPORIZADOR LOCAL RECTIFICADO (SUMA TIEMPO A ABSOLUTAMENTE TODAS LAS ÓRDENES) ---
+        // --- 7. TEMPORIZADOR LOCAL RECTIFICADO ---
         setInterval(() => {
             let cambios = false;
 
-            // 1. Sumar tiempo a las comandas visibles en pantalla (los 12 slots)
             espacioComandas.forEach(comanda => {
                 if (comanda) {
                     comanda.segundosTranscurridos++;
@@ -760,26 +730,20 @@
                 }
             });
 
-            // 2. NUEVO: Sumar tiempo también a las comandas en cola que no caben en pantalla
             colaDeEspera.forEach(comanda => {
                 if (comanda) {
                     comanda.segundosTranscurridos++;
                     tiemposDeOrdenes[comanda.id] = comanda.segundosTranscurridos;
-                    // No activa 'cambios = true' porque las de la cola no necesitan redibujarse inmediatamente en el DOM
                 }
             });
 
-            if (cambios) {
-                renderizarPantalla();
-            }
+            if (cambios) renderizarPantalla();
         }, 1000);
 
-        // Consultar la Base de Datos automáticamente cada 3 segundos
         setInterval(consultarBaseDatosReal, 3000);
 
         // --- 8. RENDERIZADO DE LA INTERFAZ ---
         function renderizarPantalla() {
-            // Guardar la posición actual del scroll de cada tarjeta activa
             const posicionesScroll = {};
             const tarjetasActivas = kdsGrid.querySelectorAll('.tarjeta-comanda');
             tarjetasActivas.forEach(tarjeta => {
@@ -793,13 +757,12 @@
 
             kdsGrid.innerHTML = ''; 
 
-            // VERIFICACIÓN: SI NO HAY NINGUNA COMANDA EN TODO EL SISTEMA, SE DIBUJA SOLO LA IMAGEN
             if (totalComandasLlegadas === 0) {
                 const divImagenInicial = document.createElement('div');
                 divImagenInicial.className = 'imagen-kds-vacio';
                 divImagenInicial.innerHTML = `<img src="Resources/imagen_inicial.png" alt="Esperando comandas...">`;
                 kdsGrid.appendChild(divImagenInicial);
-                return; // Detiene el código aquí para que no dibuje los Slots vacíos
+                return; 
             }
 
             espacioComandas.forEach((comanda, index) => {
@@ -814,7 +777,7 @@
 
                     if (minutos >= 4 && minutos < 8) {
                         claseSemaforo = 'comanda-advertencia';
-                    } else if (minutos >= 8 && minutes < 12) { 
+                    } else if (minutos >= 8 && minutos < 12) { 
                         claseSemaforo = 'comanda-critico';
                     } else if (minutos >= 12) {
                         claseSemaforo = 'comanda-urgente';
@@ -837,17 +800,23 @@
                         const claseTachado = estaTachado ? 'completado' : '';
                         const claseBoton = estaTachado ? 'btn-tachar completado' : 'btn-tachar';
 
+                        // Formatear el tiempo capturado de este producto individual
+                        const pMM = String(Math.floor(p.segundosCapturados / 60)).padStart(2, '0');
+                        const pSS = String(p.segundosCapturados % 60).padStart(2, '0');
+
                         htmlProductos += `
                             <li class="fila-producto-sombreada">
                                 <div class="producto-item-contenedor ${claseTachado}" style="display: flex; align-items: center; flex-grow: 1;">
                                     <span class="cant-item">${p.cant}</span>
                                     <span class="nombre-item">${p.nombre}</span>
                                 </div>
+                                <span class="tiempo-producto-capturado">${pMM}:${pSS}</span>
                                 <button class="${claseBoton}" onclick="toggleTacharProducto('${comanda.id}', ${pIdx})">X</button>
                             </li>
                         `;
-                        if (p.notes || (p.notas && p.notas.trim() !== "" && p.notas.trim() !== "-")) {
-                            const notaTexto = p.notas ? p.notas.trim() : p.notes.trim();
+                        
+                        let notaTexto = p.notas ? String(p.notas).trim() : (p.notes ? String(p.notes).trim() : "");
+                        if (notaTexto !== "" && notaTexto !== "-") {
                             notasDeLaOrden.push(notaTexto);
                         }
                     });
@@ -874,9 +843,7 @@
                         <div class="tarjeta-header">
                             <div class="header-identificadores">
                                 <span class="id-comanda">ORDEN #${comanda.id}</span>
-                                <span class="id-mesa">
-                                    ${textoCabecera}
-                                </span>
+                                <span class="id-mesa">${textoCabecera}</span>
                             </div>
                             <div class="tipo-pedido-contenedor" title="${comanda.tipo}">
                                 <img class="tipo-pedido-icon" src="${imagenesPedido[comanda.tipo] || imagenesPedido['Local']}" alt="${comanda.tipo}">
@@ -897,22 +864,17 @@
 
                         <div class="tarjeta-footer">
                             <span class="tiempo-transcurrido">${mm}:${ss}</span>
-
                             ${(textoNotaFinal && textoNotaFinal.trim() !== "") ? `
                                 <button class="btn-nota" onclick="toggleNota(${index})">NOTA</button>
                             ` : `<div style="flex-grow:1;"></div>`}
-
                             <button class="btn-despachar" onclick="despacharComanda(${index})">Listo</button>
                         </div>
                     `;
                     kdsGrid.appendChild(divTarjeta);
 
-                    // Restaurar el scroll guardado de esta tarjeta
                     if (posicionesScroll[comanda.id] !== undefined) {
                         const bodyReciente = divTarjeta.querySelector('.tarjeta-body');
-                        if (bodyReciente) {
-                            bodyReciente.scrollTop = posicionesScroll[comanda.id];
-                        }
+                        if (bodyReciente) bodyReciente.scrollTop = posicionesScroll[comanda.id];
                     }
                 }
             });
