@@ -212,6 +212,23 @@
             background-color: var(--bg-principal);
         }
 
+        /* ESTILO PARA LA IMAGEN CUANDO NO HAY COMANDAS */
+        .imagen-kds-vacio {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .imagen-kds-vacio img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
         /* ==========================================================================
            4. ESTILO DE LAS TARJETAS (ESTADOS DEL SEMÁFORO)
            ========================================================================== */
@@ -478,7 +495,7 @@
                 Sonido Activo
             </label>
 
-            <input type="text" id="nombreAudio" class="input-audio-seleccionado" value="nuevo pedido.mp3" readonly>
+            <input type="text" id="nombreAudio" class="input-audio-seleccionado" value="Nuevo Pedido.mp3" readonly>
         </div>
     </header>
 
@@ -499,7 +516,7 @@
         let totalComandasLlegadas = 0;
         let espacioComandas = Array(12).fill(null);
         let colaDeEspera = [];
-        let audioUrlPorDefecto = "./sound/Nuevo Pedido.mp3";
+        let audioUrlPorDefecto = "./sound/nuevo pedido.mp3";
 
         // Almacenes de memoria local
         let tiemposDeOrdenes = {};
@@ -511,8 +528,8 @@
 
         const imagenesPedido = {
             "Local": "Resources/mesa.png",
-            "Delivery": "Resources/Delivery.png",
-            "Para Llevar": "Resources/Para llevar.png"
+            "Delivery": "Resources/delivery.png",
+            "Para Llevar": "Resources/para llevar.png"
         };
 
         // --- 2. SELECTORES DOM ---
@@ -773,6 +790,15 @@
 
             kdsGrid.innerHTML = ''; 
 
+            // VERIFICACIÓN: SI NO HAY NINGUNA COMANDA EN TODO EL SISTEMA, SE DIBUJA SOLO LA IMAGEN
+            if (totalComandasLlegadas === 0) {
+                const divImagenInicial = document.createElement('div');
+                divImagenInicial.className = 'imagen-kds-vacio';
+                divImagenInicial.innerHTML = `<img src="Resources/imagen_inicial.png" alt="Esperando comandas...">`;
+                kdsGrid.appendChild(divImagenInicial);
+                return; // Detiene el código aquí para que no dibuje los Slots vacíos
+            }
+
             espacioComandas.forEach((comanda, index) => {
                 if (comanda === null) {
                     const divVacio = document.createElement('div');
@@ -785,7 +811,7 @@
 
                     if (minutos >= 4 && minutos < 8) {
                         claseSemaforo = 'comanda-advertencia';
-                    } else if (minutos >= 8 && minutos < 12) { 
+                    } else if (minutos >= 8 && minutes < 12) { 
                         claseSemaforo = 'comanda-critico';
                     } else if (minutos >= 12) {
                         claseSemaforo = 'comanda-urgente';
