@@ -489,7 +489,7 @@
                 Sonido Activo
             </label>
 
-            <input type="text" id="nombreAudio" class="input-audio-seleccionado" value="Nuevo Pedido.mp3" readonly>
+            <input type="text" id="nombreAudio" class="input-audio-seleccionado" value="nuevo pedido.mp3" readonly>
         </div>
     </header>
 
@@ -507,10 +507,60 @@
         let audioUrlPorDefecto = "./sound/nuevo pedido.mp3";
 
         let tiemposDeOrdenes = {};
-        let tiemposDeProductos = {}; // Guardará el tiempo de captura exacto por producto
+        let tiemposDeProductos = {}; 
         let productosTachados = {}; 
         let notasAbiertas = {}; 
         let comandasDespachadasLocalmente = {};
+        let audioInteractuado = false;
+
+        // === LISTA DE PRODUCTOS PERMITIDOS UNIFICADA (Cevichería) ===
+        const nombresPermitidos = [
+             // === PLATOS MARINOS DE SALA ===
+            "A MARISCO PERSONAL","A MARISCO MEDIANO","A MARISCO FAMILIAR",
+            "CH PESCADO PERSONAL","CH PESCADO MEDIANO","A PESCADO FAMILIAR",
+            "CHAUFA MARISCO PERS","CHAUFA MARISCO MEDI","CHAUFA MARISCO FAMI",
+            "CHICH POTA PERSONAL","CHICH POTA MEDIANO","CHICH POTA FAMILIAR",
+            "ATIGRADO","TSUNAMI","MAREA BRAVA","MAREMOTO","BRISA MARINA",
+            "PESCADO A LO MACHO","CAUSA ACEVICHADA",
+            // === PLATOS CRIOLLOS DE SALA ===
+            "ALMUERZO DEL DIA","CHICHARRON DE POLLO","MILANESA DE POLLO",
+            "TORTILLA DE RAYA","POLLO BROSTERS","POLLO A LA PLANCHA",
+            "POLLO MECHADO","POLLO AL HORNO","ARROZ CON POLLO","CARNE FRITA",
+            "ASADO","ESTOFADO","ADOBO","SECO DE RES","CABRITO NORTEÑO","FRITO D CHANCHO",
+            "CHICH DE CHANCHO","SALTADO DE CARNE","CACHEMA FRITA(10)","CACHEMA FRITA(12)",
+            "ALMUERZO + TAPER","TALLARINES","CAU-CAU",
+            // === PLATOS DELIVERY Y PARA LLEVAR ===
+            "ESCOLAR + TAPER","TORTA(8)+TAPER","TORTA(10)+TAPER","TORTA(15)+TAPER","TORTA(20)+TAPER",
+            "TORTA(25)+TAPER","TORTA(30)+TAPER","TORTA(35)+TAPER","TORTA(40)+TAPER","TORTA(50)+TAPER",
+            "RELLENA(8)+TAPER","RELLENA(10)+TAPER","RELLENA(15)+TAPER","RELLENA(20)+TAPER",
+            "RELLENA(25)+TAPER","RELLENA(30)+TAPER","RELLENA(35)+TAPER","RELLENA(40)+TAPER","RELLENA(50)+TAPER",
+            "HUANCAINA(8)+TAPER","HUANCAINA(10)+TAPER","HUANCAINA(15)+TAPER","HUANCAINA(20)+TAPER",
+            "HUANCAINA(25)+TAPER","HUANCAINA(30)+TAPER","HUANCAINA(35)+TAPER","HUANCAINA(40)+TAPER","HUANCAINA(50)+TAPER", 
+            "A MARISCO(PER)+TAPER","A MARISCO(MED)+TAPER","A MARISCO(FAM)+TAPER",
+            "CH PESCADO(PER)+TAPER","CH PESCADO(MED)+TAPER","CH PESCADO(FAM)+TAPER",
+            "CHICH POTA(PER)+TAPER","CHICH POTA(MED)+TAPER","CHICH POTA(FAM)+TAPER",
+            "MAREMOTO+TAPERS","MAREA BRAVA+TAPERS","BRISA MARINA+TAPERS","TSUNAMI+TAPERS",
+            "PESCADO MACHO+TAPERS","ATIGRADO+TAPERS","CAUSA ACEVICHADA+TAPERS",
+            // === BEBIDAS FRIAS ===
+            "CEBADA VASO","CH JORA VASO","CH MORADA VASO","MARACUYA VASO",
+            "CEBADA JARRA","CH JORA JARRA","CH MORADA JARRA","MARACUYA JARRA","CHICHA JORA 1.5L","CHICHA JORA 3L"
+            // === ADICIONALES ===
+            "TORTITA SOLA","RELLENA SOLA","HUANCAINA SOLA","TAMAL SOLO","HUMITA SOLA",
+            "PORCION DE ARROZ","PORCION DE YUCAS","PORCION DE LANGOSTINO","PORCION DE CAMOTE",
+            "HUEVO ENTERO","PORCION ARROZ VERDE","PORCION DE PALABRITAS","PORCION DE CANCHA",
+           // === BEBIDAS CALIENTES ===
+            "CAFE","TE","MANZANILLA","CAFE CON LECHE","CAFE/LECHE",
+           // === BURGERS ===
+            "SANDWICH DE HUEVO","SANDWICH DE POLLO","SANDWICH DE QUESO","HAMBURGUESA DE CARNE","HAMBURGUESA DE POLLO",
+            "CHORIBURGUER","HAMBURGUESA ROYAL","BURGER ESPECIAL","HAMBURGUESA SIMPLE","HAMBURGUESA A LO POBRE",
+             // === JUGOS SIMPLES ===
+             "JUGO DE PAPAYA","JUGO DE PIÑA","JUGO DE MANZANA","JUGO DE MELON","JUGO DE GUANABANA","JUGO DE MANGO",
+             "SURTIDO","JUG FRESA/SIN LECHE","JUG ESPECIAL/SIN LECHE",
+             // === JUGOS CREMOSOS ===
+             "JUG FRESA/LECHE","JUG MANGO/LECHE","JUG ARAND/LECHE","JUG LUCUMA/LECHE","JUG PLAT/LECHE",
+             "JUG MELON/LECHE","JUG PAPAYA/LECHE","JUG ESPECIAL CON LECHE","POWER PUNCH",
+
+        ];
 
         const imagenesPedido = {
             "Local": "Resources/mesa.png",
@@ -525,6 +575,17 @@
         const btnFullscreen = document.getElementById('btnFullscreen');
 
         audioPlayer.src = audioUrlPorDefecto;
+
+        // Desbloquear políticas de autoplay al interactuar con el documento
+        document.addEventListener('click', () => {
+            if (!audioInteractuado) {
+                audioPlayer.play().then(() => {
+                    audioPlayer.pause();
+                    audioPlayer.currentTime = 0;
+                    audioInteractuado = true;
+                }).catch(() => {});
+            }
+        }, { once: true });
 
         // --- 3. FUNCIONALIDAD FULLSCREEN ---
         btnFullscreen.addEventListener('click', () => {
@@ -561,11 +622,20 @@
                 }
 
                 const mapaComandas = {};
-                const conteoProductosFetch = {}; // Controla duplicados en el mismo fetch
+                const conteoProductosFetch = {}; 
 
                 platosSQL.forEach(item => {
                     const idVentaRaw = item.Orden || item.idventa;
                     if (idVentaRaw === undefined || idVentaRaw === null) return; 
+
+                    const nombreProducto = item.Producto || item.producto || "Plato sin descripción";
+                    
+                    const productoEnLetrasMayusculas = nombreProducto.trim().toUpperCase();
+                    const coincideFiltro = nombresPermitidos.some(nom => nom.trim().toUpperCase() === productoEnLetrasMayusculas);
+                    
+                    if (!coincideFiltro) {
+                        return;
+                    }
 
                     const idVenta = String(idVentaRaw);
 
@@ -590,13 +660,11 @@
                             mesa: nombreMesa, 
                             cliente: nombreCliente, 
                             productos: [],
-                            segundosTranscurridos: tiemposDeOrdenes[idVenta] || 0,
+                            segundosTranscurridos: tiemposDeOrdenes[idVenta] !== undefined ? tiemposDeOrdenes[idVenta] : 0,
                             mostrarNota: false,
                             notaVenta: item.Nota_venta && item.Nota_venta.trim() !== "-" ? item.Nota_venta : "" 
                         };
                     }
-                    
-                    const nombreProducto = item.Producto || item.producto || "Plato sin descripción";
                     
                     if (!conteoProductosFetch[idVenta]) conteoProductosFetch[idVenta] = {};
                     if (!conteoProductosFetch[idVenta][nombreProducto]) conteoProductosFetch[idVenta][nombreProducto] = 0;
@@ -604,11 +672,9 @@
                     const ocurrencia = conteoProductosFetch[idVenta][nombreProducto];
                     conteoProductosFetch[idVenta][nombreProducto]++;
 
-                    // Generar clave única para guardar el tiempo de este producto
                     const claveProductoTiempo = `${idVenta}-${nombreProducto}-${ocurrencia}`;
                     const tiempoActualComanda = tiemposDeOrdenes[idVenta] || 0;
 
-                    // Si el producto es nuevo, congela el tiempo transcurrido actual de la comanda
                     if (tiemposDeProductos[claveProductoTiempo] === undefined) {
                         tiemposDeProductos[claveProductoTiempo] = tiempoActualComanda;
                     }
@@ -633,7 +699,7 @@
 
                 if (hayNuevaOrden && checkSonido && checkSonido.checked && audioPlayer) {
                     audioPlayer.currentTime = 0;
-                    audioPlayer.play().catch(e => console.log("Interacción requerida para audio."));
+                    audioPlayer.play().catch(e => console.log("Haga clic en la pantalla para permitir el audio automáticamente."));
                 }
 
                 let nuevasRanuras = Array(12).fill(null);
@@ -668,6 +734,7 @@
             const archivo = e.target.files[0];
             if (archivo) {
                 audioPlayer.src = URL.createObjectURL(archivo);
+                document.getElementById('nombreAudio').value = archivo.name;
             }
         });
 
@@ -687,7 +754,6 @@
             comandasDespachadasLocalmente[comanda.id] = true;
             delete tiemposDeOrdenes[comanda.id];
             
-            // Limpiar tiempos de productos al despachar
             Object.keys(tiemposDeProductos).forEach(clave => {
                 if (clave.startsWith(`${comanda.id}-`)) delete tiemposDeProductos[clave];
             });
@@ -800,7 +866,6 @@
                         const claseTachado = estaTachado ? 'completado' : '';
                         const claseBoton = estaTachado ? 'btn-tachar completado' : 'btn-tachar';
 
-                        // Formatear el tiempo capturado de este producto individual
                         const pMM = String(Math.floor(p.segundosCapturados / 60)).padStart(2, '0');
                         const pSS = String(p.segundosCapturados % 60).padStart(2, '0');
 
