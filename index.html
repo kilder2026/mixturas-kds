@@ -543,7 +543,7 @@
             "PESCADO MACHO+TAPERS","ATIGRADO+TAPERS","CAUSA ACEVICHADA+TAPERS",
             // === BEBIDAS FRIAS ===
             "CEBADA VASO","CH JORA VASO","CH MORADA VASO","MARACUYA VASO",
-            "CEBADA JARRA","CH JORA JARRA","CH MORADA JARRA","MARACUYA JARRA","CHICHA JORA 1.5L","CHICHA JORA 3L"
+            "CEBADA JARRA","CH JORA JARRA","CH MORADA JARRA","MARACUYA JARRA","CHICHA JORA 1.5L","CHICHA JORA 3L",
             // === ADICIONALES ===
             "TORTITA SOLA","RELLENA SOLA","HUANCAINA SOLA","TAMAL SOLO","HUMITA SOLA",
             "PORCION DE ARROZ","PORCION DE YUCAS","PORCION DE LANGOSTINO","PORCION DE CAMOTE",
@@ -558,9 +558,20 @@
              "SURTIDO","JUG FRESA/SIN LECHE","JUG ESPECIAL/SIN LECHE",
              // === JUGOS CREMOSOS ===
              "JUG FRESA/LECHE","JUG MANGO/LECHE","JUG ARAND/LECHE","JUG LUCUMA/LECHE","JUG PLAT/LECHE",
-             "JUG MELON/LECHE","JUG PAPAYA/LECHE","JUG ESPECIAL CON LECHE","POWER PUNCH",
-
+             "JUG MELON/LECHE","JUG PAPAYA/LECHE","JUG ESPECIAL CON LECHE","POWER PUNCH"
         ];
+
+        // Normalizador de texto para ignorar acentos, tildes y espacios extras
+        function normalizarTexto(texto) {
+            return String(texto || '')
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim()
+                .toUpperCase();
+        }
+
+        const nombresPermitidosNormalizados = nombresPermitidos.map(nom => normalizarTexto(nom));
 
         const imagenesPedido = {
             "Local": "Resources/mesa.png",
@@ -630,11 +641,14 @@
 
                     const nombreProducto = item.Producto || item.producto || "Plato sin descripción";
                     
-                    const productoEnLetrasMayusculas = nombreProducto.trim().toUpperCase();
-                    const coincideFiltro = nombresPermitidos.some(nom => nom.trim().toUpperCase() === productoEnLetrasMayusculas);
+                    const productoNormalizado = normalizarTexto(nombreProducto);
                     
-                    if (!coincideFiltro) {
-                        return;
+                    // Si la lista de permitidos tiene elementos, verificamos coincidencias
+                    if (nombresPermitidosNormalizados.length > 0) {
+                        const coincideFiltro = nombresPermitidosNormalizados.some(nom => nom === productoNormalizado);
+                        if (!coincideFiltro) {
+                            return;
+                        }
                     }
 
                     const idVenta = String(idVentaRaw);
