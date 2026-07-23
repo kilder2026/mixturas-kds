@@ -478,9 +478,18 @@
 
         <div class="controles-config">
             <label class="btn-custom">
-                Cargar MP3
+                MP3 Nuevo
                 <input type="file" id="inputAudio" accept="audio/mp3">
             </label>
+
+            <input type="text" id="nombreAudio" class="input-audio-seleccionado" value="nuevo pedido.mp3" readonly>
+
+            <label class="btn-custom" style="display: none;">
+                MP3 Agregado
+                <input type="file" id="inputAudioActualizacion" accept="audio/mp3">
+            </label>
+
+            <input type="text" id="nombreAudioActualizacion" class="input-audio-seleccionado" value="atencion cocina.mp3" readonly style="display: none;">
 
             <button class="btn-custom" id="btnFullscreen">FULL</button>
 
@@ -488,8 +497,6 @@
                 <input type="checkbox" id="checkSonido" checked>
                 Sonido Activo
             </label>
-
-            <input type="text" id="nombreAudio" class="input-audio-seleccionado" value="nuevo pedido.mp3" readonly>
         </div>
     </header>
 
@@ -498,6 +505,7 @@
     </main>
 
     <audio id="audioNotificacion" preload="auto"></audio>
+    <audio id="audioActualizacion" preload="auto"></audio>
 
     <script> 
         // --- 1. ESTADO DE LA APLICACIÓN ---
@@ -505,12 +513,14 @@
         let espacioComandas = Array(12).fill(null);
         let colaDeEspera = [];
         let audioUrlPorDefecto = "./sound/nuevo pedido.mp3";
+        let audioActualizacionPorDefecto = "./sound/atencion cocina.mp3";
 
         let tiemposDeOrdenes = {};
         let tiemposDeProductos = {}; 
         let productosTachados = {}; 
         let notasAbiertas = {}; 
         let comandasDespachadasLocalmente = {};
+        let conteoProductosPrevio = {}; 
         let audioInteractuado = false;
 
         // === LISTA DE PRODUCTOS PERMITIDOS UNIFICADA (Cevichería) ===
@@ -558,20 +568,9 @@
              "SURTIDO","JUG FRESA/SIN LECHE","JUG ESPECIAL/SIN LECHE",
              // === JUGOS CREMOSOS ===
              "JUG FRESA/LECHE","JUG MANGO/LECHE","JUG ARAND/LECHE","JUG LUCUMA/LECHE","JUG PLAT/LECHE",
-             "JUG MELON/LECHE","JUG PAPAYA/LECHE","JUG ESPECIAL CON LECHE","POWER PUNCH"
+             "JUG MELON/LECHE","JUG PAPAYA/LECHE","JUG ESPECIAL CON LECHE","POWER PUNCH",
+
         ];
-
-        // Normalizador de texto para ignorar acentos, tildes y espacios extras
-        function normalizarTexto(texto) {
-            return String(texto || '')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .replace(/\s+/g, ' ')
-                .trim()
-                .toUpperCase();
-        }
-
-        const nombresPermitidosNormalizados = nombresPermitidos.map(nom => normalizarTexto(nom));
 
         const imagenesPedido = {
             "Local": "Resources/mesa.png",
@@ -582,10 +581,12 @@
         // --- 2. SELECTORES DOM ---
         const kdsGrid = document.getElementById('kdsGrid');
         const audioPlayer = document.getElementById('audioNotificacion');
+        const audioActualizacionPlayer = document.getElementById('audioActualizacion');
         const checkSonido = document.getElementById('checkSonido');
         const btnFullscreen = document.getElementById('btnFullscreen');
 
         audioPlayer.src = audioUrlPorDefecto;
+        audioActualizacionPlayer.src = audioActualizacionPorDefecto;
 
         // Desbloquear políticas de autoplay al interactuar con el documento
         document.addEventListener('click', () => {
@@ -593,6 +594,11 @@
                 audioPlayer.play().then(() => {
                     audioPlayer.pause();
                     audioPlayer.currentTime = 0;
+                }).catch(() => {});
+                
+                audioActualizacionPlayer.play().then(() => {
+                    audioActualizacionPlayer.pause();
+                    audioActualizacionPlayer.currentTime = 0;
                     audioInteractuado = true;
                 }).catch(() => {});
             }
@@ -626,6 +632,7 @@
                 if (!Array.isArray(platosSQL) || platosSQL.length === 0) {
                     espacioComandas = Array(12).fill(null);
                     totalComandasLlegadas = 0;
+                    conteoProductosPrevio = {};
                     const txtTotalComandas = document.getElementById('txtTotalComandas');
                     if (txtTotalComandas) txtTotalComandas.innerText = "0";
                     renderizarPantalla();
@@ -641,14 +648,11 @@
 
                     const nombreProducto = item.Producto || item.producto || "Plato sin descripción";
                     
-                    const productoNormalizado = normalizarTexto(nombreProducto);
+                    const productoEnLetrasMayusculas = nombreProducto.trim().toUpperCase();
+                    const coincideFiltro = nombresPermitidos.some(nom => nom.trim().toUpperCase() === productoEnLetrasMayusculas);
                     
-                    // Si la lista de permitidos tiene elementos, verificamos coincidencias
-                    if (nombresPermitidosNormalizados.length > 0) {
-                        const coincideFiltro = nombresPermitidosNormalizados.some(nom => nom === productoNormalizado);
-                        if (!coincideFiltro) {
-                            return;
-                        }
+                    if (!coincideFiltro) {
+                        return;
                     }
 
                     const idVenta = String(idVentaRaw);
@@ -704,16 +708,31 @@
                 const listaComandasAgrupadas = Object.values(mapaComandas);
 
                 let hayNuevaOrden = false;
+                let hayNuevoProductoEnMesaOcupada = false;
+
                 listaComandasAgrupadas.forEach(nueva => {
+                    const cantProductosNuevos = nueva.productos.length;
+                    
                     if (tiemposDeOrdenes[nueva.id] === undefined) {
                         tiemposDeOrdenes[nueva.id] = 0;
                         hayNuevaOrden = true;
+                    } else {
+                        const cantProductosAnteriores = conteoProductosPrevio[nueva.id] || 0;
+                        if (cantProductosNuevos > cantProductosAnteriores) {
+                            hayNuevoProductoEnMesaOcupada = true;
+                        }
                     }
+                    conteoProductosPrevio[nueva.id] = cantProductosNuevos;
                 });
 
-                if (hayNuevaOrden && checkSonido && checkSonido.checked && audioPlayer) {
-                    audioPlayer.currentTime = 0;
-                    audioPlayer.play().catch(e => console.log("Haga clic en la pantalla para permitir el audio automáticamente."));
+                if (checkSonido && checkSonido.checked) {
+                    if (hayNuevaOrden && audioPlayer) {
+                        audioPlayer.currentTime = 0;
+                        audioPlayer.play().catch(e => console.log("Haga clic en la pantalla para permitir el audio automáticamente."));
+                    } else if (hayNuevoProductoEnMesaOcupada && audioActualizacionPlayer) {
+                        audioActualizacionPlayer.currentTime = 0;
+                        audioActualizacionPlayer.play().catch(e => console.log("Haga clic en la pantalla para permitir el audio automáticamente."));
+                    }
                 }
 
                 let nuevasRanuras = Array(12).fill(null);
@@ -752,6 +771,14 @@
             }
         });
 
+        document.getElementById('inputAudioActualizacion').addEventListener('change', function(e) {
+            const archivo = e.target.files[0];
+            if (archivo) {
+                audioActualizacionPlayer.src = URL.createObjectURL(archivo);
+                document.getElementById('nombreAudioActualizacion').value = archivo.name;
+            }
+        });
+
         // --- 6. FUNCIONES DE INTERACCIÓN -----
         function toggleNota(index) {
             const comanda = espacioComandas[index];
@@ -767,6 +794,7 @@
 
             comandasDespachadasLocalmente[comanda.id] = true;
             delete tiemposDeOrdenes[comanda.id];
+            delete conteoProductosPrevio[comanda.id];
             
             Object.keys(tiemposDeProductos).forEach(clave => {
                 if (clave.startsWith(`${comanda.id}-`)) delete tiemposDeProductos[clave];
