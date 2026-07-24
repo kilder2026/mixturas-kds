@@ -287,9 +287,19 @@
             animation: pulso-urgente 2s infinite alternate;
         }
 
+        /* Parpadeo lento (cada 3s) activo solo al llegar a los 15 minutos */
+        .comanda-urgente.parpadear-15min {
+            animation: pulso-urgente 2s infinite alternate, parpadeo-lento 3s infinite;
+        }
+
         @keyframes pulso-urgente {
             0% { box-shadow: 0 0 5px rgba(239, 68, 68, 0.2); }
             100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+        }
+
+        @keyframes parpadeo-lento {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
         }
 
         .tarjeta-header {
@@ -525,18 +535,18 @@
 
         // === LISTA DE PRODUCTOS PERMITIDOS UNIFICADA (Cevichería) ===
         const nombresPermitidos = [
-             // === PLATOS MARINOS DE SALA ===
+             // === PLATOS MARINOS EN SALA ===
             "A MARISCO PERSONAL","A MARISCO MEDIANO","A MARISCO FAMILIAR",
             "CH PESCADO PERSONAL","CH PESCADO MEDIANO","A PESCADO FAMILIAR",
             "CHAUFA MARISCO PERS","CHAUFA MARISCO MEDI","CHAUFA MARISCO FAMI",
             "CHICH POTA PERSONAL","CHICH POTA MEDIANO","CHICH POTA FAMILIAR",
-            "ATIGRADO","TSUNAMI","MAREA BRAVA","MAREMOTO","BRISA MARINA",
-            "PESCADO A LO MACHO","CAUSA ACEVICHADA",
-            // === PLATOS CRIOLLOS DE SALA ===
+            "ATIGRADO","TSUNAMI (TRÍO)","MAREA BRAVA (DÚO)","MAREMOTO( DÚO)","BRISA MARINA (DÚO)",
+            "PESCADO A LO MACHO","CAUSA ACEVICHADA","CEVICHE CREMOSO",
+            // === PLATOS CRIOLLOS EN SALA ===
             "ALMUERZO DEL DIA","CHICHARRON DE POLLO","MILANESA DE POLLO",
             "TORTILLA DE RAYA","POLLO BROSTERS","POLLO A LA PLANCHA",
             "POLLO MECHADO","POLLO AL HORNO","ARROZ CON POLLO","CARNE FRITA",
-            "ASADO","ESTOFADO","ADOBO","SECO DE RES","CABRITO NORTEÑO","FRITO D CHANCHO",
+            "ASADO","ESTOFADO","ADOBO","SECO DE RES","CABRITO NORTEÑO","FRITO D' CHANCHO",
             "CHICH DE CHANCHO","SALTADO DE CARNE","CACHEMA FRITA(10)","CACHEMA FRITA(12)",
             "ALMUERZO + TAPER","TALLARINES","CAU-CAU",
             // === PLATOS DELIVERY Y PARA LLEVAR ===
@@ -550,25 +560,26 @@
             "CH PESCADO(PER)+TAPER","CH PESCADO(MED)+TAPER","CH PESCADO(FAM)+TAPER",
             "CHICH POTA(PER)+TAPER","CHICH POTA(MED)+TAPER","CHICH POTA(FAM)+TAPER",
             "MAREMOTO+TAPERS","MAREA BRAVA+TAPERS","BRISA MARINA+TAPERS","TSUNAMI+TAPERS",
-            "PESCADO MACHO+TAPERS","ATIGRADO+TAPERS","CAUSA ACEVICHADA+TAPERS",
-            // === BEBIDAS FRIAS ===
-            "CEBADA VASO","CH JORA VASO","CH MORADA VASO","MARACUYA VASO",
-            "CEBADA JARRA","CH JORA JARRA","CH MORADA JARRA","MARACUYA JARRA","CHICHA JORA 1.5L","CHICHA JORA 3L",
-            // === ADICIONALES ===
-            "TORTITA SOLA","RELLENA SOLA","HUANCAINA SOLA","TAMAL SOLO","HUMITA SOLA",
-            "PORCION DE ARROZ","PORCION DE YUCAS","PORCION DE LANGOSTINO","PORCION DE CAMOTE",
-            "HUEVO ENTERO","PORCION ARROZ VERDE","PORCION DE PALABRITAS","PORCION DE CANCHA",
-           // === BEBIDAS CALIENTES ===
-            "CAFE","TE","MANZANILLA","CAFE CON LECHE","CAFE/LECHE",
-           // === BURGERS ===
+            "PESCADO MACHO+TAPER","ATIGRADO+TAPER","CAUSA ACEVICHADA+TAPER",
+            // === BEBIDAS FRIAS PARA LLEVAR ===
+            "CEBADA-VASO","CH JORA-VASO","CH MORADA-VASO","MARACUYA-VASO",
+            "CEBADA-JARRA","CH JORA-JARRA","CH MORADA-JARRA","MARACUYA-JARRA","CHICHA-JORA 1.5L","CHICHA-JORA 3L",
+            "GASEOSA-600ML","GASEOSA-1L","GASEOSA-1.5L","GASEOSA-2L","GASEOSA-3L",
+            // === ADICIONALES PARA LLEVAR===
+            "TORTITA-SOLA","RELLENA-SOLA","HUANCAINA-SOLA","TAMAL-SOLO","HUMITA-SOLA",
+            "PORCION D' ARROZ","PORCION D' YUCAS","PORCION D'LANGOSTINO","PORCION D'CAMOTE",
+            "HUEVO ENTERO","PORCION ARROZ VERDE","PORCION D' PALABRITAS","PORCION D' CANCHA",
+           // === BEBIDAS CALIENTES PARA LLEVAR===
+            "CAFE+TAPER VASO","TE+TAPER VASO","MANZANILLA+TAPER VASO","CAFE/LECHE+TAPER VASO",
+           // === BURGERS PARA MESA Y DELIVERY PARA LLEVAR===
             "SANDWICH DE HUEVO","SANDWICH DE POLLO","SANDWICH DE QUESO","HAMBURGUESA DE CARNE","HAMBURGUESA DE POLLO",
             "CHORIBURGUER","HAMBURGUESA ROYAL","BURGER ESPECIAL","HAMBURGUESA SIMPLE","HAMBURGUESA A LO POBRE",
-             // === JUGOS SIMPLES ===
-             "JUGO DE PAPAYA","JUGO DE PIÑA","JUGO DE MANZANA","JUGO DE MELON","JUGO DE GUANABANA","JUGO DE MANGO",
-             "SURTIDO","JUG FRESA/SIN LECHE","JUG ESPECIAL/SIN LECHE",
+             // === JUGOS SIMPLES DELIVERY Y PARA LLEVAR===
+             "JUGO/PAPAYA+TAPER(V)","JUGO/PIÑA+TAPER(V)","JUGO/MANZANA+TAPER(V)","JUGO/MELON+TAPER(V)","JUGO/GUANABANA+TAPER(V)","JUGO/MANGO+TAPER(V)",
+             "SURTIDO+TAPER(V)","JUG FRESA/SIN LECHE+TAPER(V)","JUG ESPECIAL/SIN LECHE+TAPER(V)",
              // === JUGOS CREMOSOS ===
-             "JUG FRESA/LECHE","JUG MANGO/LECHE","JUG ARAND/LECHE","JUG LUCUMA/LECHE","JUG PLAT/LECHE",
-             "JUG MELON/LECHE","JUG PAPAYA/LECHE","JUG ESPECIAL CON LECHE","POWER PUNCH",
+             "JUG FRESA/LECHE+TAPER(V)","JUG MANGO/LECHE+TAPER(V)","JUG ARAND/LECHE+TAPER(V)","JUG LUCUMA/LECHE+TAPER(V)","JUG PLAT/LECHE+TAPER(V)",
+             "JUG MELON/LECHE+TAPER(V)","JUG PAPAYA/LECHE+TAPER(V)","JUG ESPECIAL/LECHE+TAPER(V)","POWER PUNCH+TAPER(V)",
 
         ];
 
@@ -889,6 +900,9 @@
                         claseSemaforo = 'comanda-critico';
                     } else if (minutos >= 12) {
                         claseSemaforo = 'comanda-urgente';
+                        if (minutos >= 15) {
+                            claseSemaforo += ' parpadear-15min';
+                        }
                     }
 
                     const mm = String(Math.floor(comanda.segundosTranscurridos / 60)).padStart(2, '0');
